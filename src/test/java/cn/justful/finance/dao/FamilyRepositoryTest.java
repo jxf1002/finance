@@ -17,6 +17,7 @@ public class FamilyRepositoryTest {
 
     @Test
     public void test() throws Exception {
+        familyRepository.deleteAll();
         familyRepository.save(new Family("家庭A"));
         familyRepository.save(new Family("家庭B"));
         familyRepository.save(new Family("家庭C"));
