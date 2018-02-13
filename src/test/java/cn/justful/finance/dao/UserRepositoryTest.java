@@ -1,6 +1,6 @@
 package cn.justful.finance.dao;
 
-import cn.justful.finance.entity.Family;
+import cn.justful.finance.entity.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +9,17 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class FamilyRepositoryTest {
+public class UserRepositoryTest {
     @Autowired
-    private FamilyRepository familyRepository;
+    private UserRepository userRepository;
 
     @Test
     public void test() throws Exception {
-        familyRepository.save(new Family("虫虫和稻稻"));
+        User user = new User();
+        user.setFamilyId(1);
+        user.setName("张三");
+        user.setPassword("abc");
+        user.setRole(0);
+        userRepository.save(user);
     }
 }
