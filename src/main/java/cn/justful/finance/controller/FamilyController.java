@@ -4,55 +4,56 @@ import cn.justful.finance.dao.FamilyRepository;
 import cn.justful.finance.dto.RestResult;
 import cn.justful.finance.entity.Family;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Created by justful on 2018/1/28.
- * 家庭Controller
- */
 @RestController
-@RequestMapping("/families")
+@RequestMapping(value = "/families", produces = MediaType.APPLICATION_JSON_VALUE)
 public class FamilyController {
-    private final FamilyRepository familyRepository;
+    private final FamilyRepository repository;
 
     @Autowired
-    public FamilyController(FamilyRepository familyRepository) {
-        this.familyRepository = familyRepository;
+    public FamilyController(FamilyRepository repository) {
+        this.repository = repository;
     }
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @GetMapping()
     RestResult<List<Family>> list() {
-        return RestResult.success(familyRepository.findAll());
+        return RestResult.success(repository.findAll());
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @GetMapping("/{id}")
     RestResult<Family> detail(@PathVariable int id) {
-        return RestResult.success(familyRepository.findOne(id));
+        return RestResult.success(repository.findOne(id));
     }
 
-    @RequestMapping(value = "", method = RequestMethod.POST)
-    RestResult<String> insert(@Param("name") String name) {
-        Family family = new Family(name);
-        familyRepository.save(family);
+    @PostMapping()
+    RestResult<String> insert(Family family) {
+        repository.save(family);
         return RestResult.success();
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @PutMapping("/{id}")
     RestResult<String> update(@PathVariable int id, Family family) {
         family.setId(id);
-        familyRepository.save(family);
+        repository.save(family);
         return RestResult.success();
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @PatchMapping("/{id}")
+    RestResult<String> patch(@PathVariable int id, Family family) {
+        Family originFamily = repository.findOne(id);
+        if (family.getName() != null)
+            originFamily.setName(family.getName());
+        repository.save(originFamily);
+        return RestResult.success();
+    }
+
+    @DeleteMapping("/{id}")
     RestResult<String> delete(@PathVariable int id) {
-        familyRepository.delete(id);
+        repository.delete(id);
         return RestResult.success();
     }
 }

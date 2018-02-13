@@ -12,11 +12,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private FamilyRepository familyRepository;
 
     @Test
     public void test() throws Exception {
         User user = new User();
-        user.setFamilyId(1);
+        user.setFamily(familyRepository.findOne(1));
         user.setName("张三");
         user.setPassword("abc");
         user.setRole(0);

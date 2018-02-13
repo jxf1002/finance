@@ -1,9 +1,6 @@
 package cn.justful.finance.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created by justful on 2018/2/13.
@@ -18,8 +15,9 @@ public class User {
     private String name;
     @Column(length = 100, nullable = false)
     private String password;
-    @Column(nullable = false)
-    private Integer familyId;
+    @ManyToOne
+    @JoinColumn(name = "family_id", nullable = false)
+    private Family family;
     @Column(nullable = false)
     private Integer role;
 
@@ -47,12 +45,12 @@ public class User {
         this.password = password;
     }
 
-    public Integer getFamilyId() {
-        return familyId;
+    public Family getFamily() {
+        return family;
     }
 
-    public void setFamilyId(Integer familyId) {
-        this.familyId = familyId;
+    public void setFamily(Family family) {
+        this.family = family;
     }
 
     public Integer getRole() {

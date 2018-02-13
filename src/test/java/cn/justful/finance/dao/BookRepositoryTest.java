@@ -14,12 +14,16 @@ import java.util.Date;
 public class BookRepositoryTest {
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private AccountRepository accountRepository;
 
     @Test
     public void test() throws Exception {
         Book book = new Book();
-        book.setUserId(1);
-        book.setAccountId(1);
+        book.setUser(userRepository.findOne(1));
+        book.setAccount(accountRepository.findOne(1));
         book.setAccountDate(new Date());
         book.setSummary("工行卡存款");
         book.setAmount(5001.23);
