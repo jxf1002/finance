@@ -30,20 +30,20 @@ public class UserController {
     }
 
     @PostMapping()
-    RestResult<String> insert(User user) {
+    RestResult<String> insert(@RequestBody User user) {
         repository.save(user);
         return RestResult.success();
     }
 
     @PutMapping("/{id}")
-    RestResult<String> update(@PathVariable int id, User user) {
+    RestResult<String> update(@PathVariable int id, @RequestBody User user) {
         user.setId(id);
         repository.save(user);
         return RestResult.success();
     }
 
     @PatchMapping("/{id}")
-    RestResult<String> patch(@PathVariable int id, User user) {
+    RestResult<String> patch(@PathVariable int id, @RequestBody User user) {
         User originUser = repository.findOne(id);
         if (user.getName() != null)
             originUser.setName(user.getName());

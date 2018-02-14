@@ -1,22 +1,98 @@
 <template>
   <div id="app">
-    <router-view/>
+    <el-container class="index-container">
+      <el-header class="el-header">
+        <el-menu
+          class="el-menu"
+          mode="horizontal"
+          @select="handleSelect"
+          background-color="#409EFF"
+          text-color="#fff"
+          active-text-color="#ffd04b">
+          <el-menu-item index="0">
+            <router-link to="/">首页</router-link>
+          </el-menu-item>
+          <el-menu-item index="1">
+            <router-link to="/family">家庭管理</router-link>
+          </el-menu-item>
+          <el-menu-item index="2">
+            <router-link to="/user">用户管理</router-link>
+          </el-menu-item>
+          <el-menu-item index="3">
+            <router-link to="/account">科目管理</router-link>
+          </el-menu-item>
+          <el-menu-item index="4">
+            <router-link to="/book">账本管理</router-link>
+          </el-menu-item>
+          <span class="menu-right">
+          <span>稻稻</span>
+           <el-dropdown>
+            <i class="el-icon-arrow-down" style="margin: 10px; color: #fff"></i>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item>登出</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+       </span>
+        </el-menu>
+      </el-header>
+
+      <el-main class="el-main">
+        <router-view/>
+      </el-main>
+      <el-footer>
+        <span class="copyright">&copy; 2018 justful.com版权所有 京ICP备18007833号-1</span>
+      </el-footer>
+    </el-container>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  methods: {
+    handleSelect (key, keyPath) {
+      console.log(key, keyPath)
+    }
+  }
 }
 </script>
 
 <style>
-  #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-    margin-top: 60px;
-  }
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
+}
+
+body {
+  margin: 0;
+}
+
+.el-header {
+  padding: 0;
+  background-color: #409eff;
+  color: #333;
+  line-height: 60px;
+  font-size: 12px;
+}
+
+.el-menu a {
+  display: block;
+}
+
+.menu-right {
+  float: right;
+  color: #fff;
+  font-size: 14px;
+}
+
+.el-main {
+  height: 850px;
+}
+
+.el-footer {
+  line-height: 60px;
+  text-align: center;
+}
 </style>

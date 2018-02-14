@@ -30,20 +30,20 @@ public class FamilyController {
     }
 
     @PostMapping()
-    RestResult<String> insert(Family family) {
+    RestResult<String> insert(@RequestBody Family family) {
         repository.save(family);
         return RestResult.success();
     }
 
     @PutMapping("/{id}")
-    RestResult<String> update(@PathVariable int id, Family family) {
+    RestResult<String> update(@PathVariable int id, @RequestBody Family family, RestResult<String> success) {
         family.setId(id);
         repository.save(family);
-        return RestResult.success();
+        return success;
     }
 
     @PatchMapping("/{id}")
-    RestResult<String> patch(@PathVariable int id, Family family) {
+    RestResult<String> patch(@PathVariable int id, @RequestBody Family family) {
         Family originFamily = repository.findOne(id);
         if (family.getName() != null)
             originFamily.setName(family.getName());

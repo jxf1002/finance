@@ -30,20 +30,20 @@ public class AccountController {
     }
 
     @PostMapping()
-    RestResult<String> insert(Account account) {
+    RestResult<String> insert(@RequestBody Account account) {
         repository.save(account);
         return RestResult.success();
     }
 
     @PutMapping("/{id}")
-    RestResult<String> update(@PathVariable int id, Account account) {
+    RestResult<String> update(@PathVariable int id, @RequestBody Account account) {
         account.setId(id);
         repository.save(account);
         return RestResult.success();
     }
 
     @PatchMapping("/{id}")
-    RestResult<String> patch(@PathVariable int id, Account account) {
+    RestResult<String> patch(@PathVariable int id, @RequestBody Account account) {
         Account originAccount = repository.findOne(id);
         if (account.getType() != null)
             originAccount.setType(account.getType());

@@ -30,20 +30,20 @@ public class BookController {
     }
 
     @PostMapping()
-    RestResult<String> insert(Book book) {
+    RestResult<String> insert(@RequestBody Book book) {
         repository.save(book);
         return RestResult.success();
     }
 
     @PutMapping("/{id}")
-    RestResult<String> update(@PathVariable int id, Book book) {
+    RestResult<String> update(@PathVariable int id, @RequestBody Book book) {
         book.setId(id);
         repository.save(book);
         return RestResult.success();
     }
 
     @PatchMapping("/{id}")
-    RestResult<String> patch(@PathVariable int id, Book book) {
+    RestResult<String> patch(@PathVariable int id, @RequestBody Book book) {
         Book originBook = repository.findOne(id);
         if (book.getUser() != null)
             originBook.setUser(book.getUser());
