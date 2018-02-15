@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <el-container class="index-container">
-      <el-header class="el-header">
+      <el-header v-if="username" class="el-header">
         <el-menu class="el-menu" mode="horizontal" background-color="#409EFF" text-color="#fff" active-text-color="#ffd04b">
           <el-menu-item index="0">
             <router-link to="/">首页</router-link>
@@ -19,7 +19,7 @@
             <router-link to="/book">账本管理</router-link>
           </el-menu-item>
           <span class="menu-right">
-            <span>稻稻</span>
+            <span>{{username}}</span>
             <el-dropdown @command="handleCommand">
               <i class="el-icon-arrow-down" style="margin: 10px; color: #fff"></i>
               <el-dropdown-menu slot="dropdown">
@@ -41,10 +41,18 @@
 </template>
 
 <script>
-import { delCookie } from './assets/js/cookie.js'
+import { getCookie, delCookie } from './assets/js/cookie.js'
 
 export default {
   name: 'App',
+  data () {
+    return {
+      username: ''
+    }
+  },
+  mounted () {
+    this.username = getCookie('username')
+  },
   methods: {
     handleCommand (command) {
       if (command === 'logout') {
@@ -53,6 +61,7 @@ export default {
     },
     logout () {
       delCookie('username')
+      this.username = ''
       this.$router.push('/login')
     }
   }

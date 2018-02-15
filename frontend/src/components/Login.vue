@@ -55,11 +55,14 @@ export default {
       ).then(function (res) {
         if (res.data.code === 0) {
           setCookie('username', res.data.data.name, 7 * 24 * 60 * 60)
-          that.$router.push('/')
+          that.$router.go('/')
+          that.$message.success('登录成功')
         } else {
-          console.log('登录失败')
+          that.$message.error('登录失败，用户名或密码不正确')
         }
-      }).catch(function () { })
+      }).catch(function () {
+        that.$message.error('登录失败，用户名或密码不正确')
+      })
     },
     inputBlur: function (errorItem, inputContent) {
       if (errorItem === 'user') {

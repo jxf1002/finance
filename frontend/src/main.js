@@ -33,9 +33,6 @@ router.beforeEach((to, from, next) => {
 let vRouter = new Vue({
   el: '#app',
   router,
-  data: {
-    loginUser: null
-  },
   components: {
     App
   },

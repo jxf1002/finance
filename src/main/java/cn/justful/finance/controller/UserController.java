@@ -65,6 +65,9 @@ public class UserController {
 
     @GetMapping("/login")
     RestResult<User> login(@RequestParam("name") String name, @RequestParam("password") String password) {
+        User user = repository.findByNameAndAndPassword(name, password);
+        if (user == null)
+            return RestResult.error(20001, "No user or wrong password");
         return RestResult.success(repository.findByNameAndAndPassword(name, password));
     }
 }
