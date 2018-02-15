@@ -1,25 +1,25 @@
 <template>
   <div id="app">
     <el-container class="index-container">
-      <el-header v-if="username" class="el-header">
+      <el-header v-if="loginUser" class="el-header">
         <el-menu class="el-menu" mode="horizontal" background-color="#409EFF" text-color="#fff" active-text-color="#ffd04b">
           <el-menu-item index="0">
             <router-link to="/">首页</router-link>
           </el-menu-item>
-          <el-menu-item index="1">
+          <el-menu-item index="1" v-if="loginUser.role === 0">
             <router-link to="/family">家庭管理</router-link>
           </el-menu-item>
-          <el-menu-item index="2">
+          <el-menu-item index="2" v-if="loginUser.role === 0">
             <router-link to="/user">用户管理</router-link>
           </el-menu-item>
-          <el-menu-item index="3">
+          <el-menu-item index="3" v-if="loginUser.role === 0">
             <router-link to="/account">科目管理</router-link>
           </el-menu-item>
           <el-menu-item index="4">
             <router-link to="/book">账本管理</router-link>
           </el-menu-item>
           <span class="menu-right">
-            <span>{{username}}</span>
+            <span>{{loginUser.name}}</span>
             <el-dropdown @command="handleCommand">
               <i class="el-icon-arrow-down" style="margin: 10px; color: #fff"></i>
               <el-dropdown-menu slot="dropdown">
@@ -47,11 +47,11 @@ export default {
   name: 'App',
   data () {
     return {
-      username: ''
+      loginUser: ''
     }
   },
   mounted () {
-    this.username = getCookie('username')
+    this.loginUser = JSON.parse(getCookie('user'))
   },
   methods: {
     handleCommand (command) {
@@ -60,8 +60,8 @@ export default {
       }
     },
     logout () {
-      delCookie('username')
-      this.username = ''
+      delCookie('user')
+      this.loginUser = null
       this.$router.push('/login')
     }
   }

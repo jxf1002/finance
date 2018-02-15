@@ -25,7 +25,7 @@ import Axios from 'axios'
 export default {
   name: 'login',
   mounted () {
-    if (getCookie('username')) {
+    if (getCookie('user')) {
       this.$router.push('/')
     }
   },
@@ -54,7 +54,7 @@ export default {
         '/api/users/login?name=' + user + '&password=' + password
       ).then(function (res) {
         if (res.data.code === 0) {
-          setCookie('username', res.data.data.name, 7 * 24 * 60 * 60)
+          setCookie('user', JSON.stringify(res.data.data), 7 * 24 * 60 * 60)
           that.$router.go('/')
           that.$message.success('登录成功')
         } else {
