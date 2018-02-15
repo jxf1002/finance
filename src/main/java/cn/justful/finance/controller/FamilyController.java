@@ -36,10 +36,10 @@ public class FamilyController {
     }
 
     @PutMapping("/{id}")
-    RestResult<String> update(@PathVariable int id, @RequestBody Family family, RestResult<String> success) {
+    RestResult<String> update(@PathVariable int id, @RequestBody Family family) {
         family.setId(id);
         repository.save(family);
-        return success;
+        return RestResult.success();
     }
 
     @PatchMapping("/{id}")
