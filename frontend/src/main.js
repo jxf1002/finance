@@ -15,7 +15,7 @@ Vue.use(ElementUI)
 
 router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {
-    if (getCookie('username')) {
+    if (getCookie('user')) {
       next()
     } else {
       next({
