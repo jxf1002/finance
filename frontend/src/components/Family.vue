@@ -24,8 +24,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="resetForm('form')">取 消</el-button>
-        <el-button type="primary" @click="handleSave ()">确 定</el-button>
+        <el-button @click="handleClose ()">取 消</el-button>
+        <el-button type="primary" @click="handleSave ('form')">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -41,7 +41,6 @@ export default {
       families: [],
       dialogFormVisible: false,
       formLabelWidth: '120px',
-      title: '家庭',
       form: {
         id: '',
         name: ''
@@ -54,28 +53,29 @@ export default {
     }
   },
   mounted: function () {
-    var that = this
-    axios.get('/api/families')
-      .then(function (response) {
-        if (response.data.code === 0) {
-          that.families = response.data.data
-        } else {
-          this.$message.error('获取列表失败' + response.data.message)
-        }
-      })
-      .catch(function (error) {
-        that.$message.error('服务器异常' + error)
-      })
+    this.loading()
   },
   methods: {
+    loading () {
+      var that = this
+      axios.get('/api/families')
+        .then(function (response) {
+          if (response.data.code === 0) {
+            that.families = response.data.data
+          } else {
+            that.$message.error('获取列表失败' + response.data.message)
+          }
+        })
+        .catch(function (error) {
+          that.$message.error('服务器异常' + error)
+        })
+    },
     showDialog (row) {
       this.dialogFormVisible = true
       if (row) {
-        this.form.id = row.id
-        this.form.name = row.name
+        this.form = row
       } else {
-        this.form.id = ''
-        this.form.name = ''
+        this.form = {}
       }
     },
     handleSave () {
@@ -90,11 +90,10 @@ export default {
                     message: '修改成功',
                     type: 'success'
                   })
-                  setTimeout(() => {
-                    location.reload()
-                  }, 500)
+                  that.loading()
+                  that.handleClose()
                 } else {
-                  this.$message.error('修改失败' + response.data.message)
+                  that.$message.error('修改失败' + response.data.message)
                 }
               })
               .catch(function (error) {
@@ -108,25 +107,20 @@ export default {
                     message: '新增成功',
                     type: 'success'
                   })
-                  setTimeout(() => {
-                    location.reload()
-                  }, 500)
+                  that.loading()
+                  that.handleClose()
                 } else {
-                  this.$message.error('新增失败' + response.data.message)
+                  that.$message.error('新增失败' + response.data.message)
                 }
               })
               .catch(function (error) {
                 that.$message.error('服务器异常' + error)
               })
           }
-          this.dialogFormVisible = false
         } else {
           return false
         }
       })
-    },
-    handleEdit (index, row) {
-      console.log(index, row)
     },
     handleDelete (index, row) {
       var that = this
@@ -139,11 +133,9 @@ export default {
                   message: '删除成功',
                   type: 'success'
                 })
-                setTimeout(() => {
-                  location.reload()
-                }, 500)
+                that.loading()
               } else {
-                this.$message.error('删除失败' + response.data.message)
+                that.$message.error('删除失败' + response.data.message)
               }
             })
             .catch(function (error) {
@@ -153,10 +145,7 @@ export default {
         .catch(_ => { })
     },
     handleClose () {
-      this.resetForm('form')
-    },
-    resetForm (formName) {
-      this.$refs[formName].resetFields()
+      this.$refs['form'].resetFields()
       this.dialogFormVisible = false
     }
   }
