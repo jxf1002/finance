@@ -62,4 +62,9 @@ public class UserController {
         repository.delete(id);
         return RestResult.success();
     }
+
+    @GetMapping("/login")
+    RestResult<User> login(@RequestParam("name") String name, @RequestParam("password") String password) {
+        return RestResult.success(repository.findByNameAndAndPassword(name, password));
+    }
 }

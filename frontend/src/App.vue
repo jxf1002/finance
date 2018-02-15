@@ -20,10 +20,10 @@
           </el-menu-item>
           <span class="menu-right">
             <span>稻稻</span>
-            <el-dropdown>
+            <el-dropdown @command="handleCommand">
               <i class="el-icon-arrow-down" style="margin: 10px; color: #fff"></i>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>登出</el-dropdown-item>
+                <el-dropdown-item command="logout">登出</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </span>
@@ -41,8 +41,21 @@
 </template>
 
 <script>
+import { delCookie } from './assets/js/cookie.js'
+
 export default {
-  name: 'App'
+  name: 'App',
+  methods: {
+    handleCommand (command) {
+      if (command === 'logout') {
+        this.logout()
+      }
+    },
+    logout () {
+      delCookie('username')
+      this.$router.push('/login')
+    }
+  }
 }
 </script>
 
