@@ -2,16 +2,14 @@
   <div class="dialog">
     <div class="loginPage">
       <h1>登录</h1>
-      <el-form>
-        <el-form-item label="用户名">
-          <el-input type="text" id="user" v-model="formName.user" @blur="inputBlur('user',formName.user)"></el-input>
-          <p>{{formName.userError}}</p>
+      <el-form :model="form" :rules="rules" ref="form">
+        <el-form-item prop="name" label="用户名">
+          <el-input type="text" v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label="密码">
-          <el-input type="password" id="password" v-model="formName.password" @blur="inputBlur('password',formName.password)"></el-input>
-          <p>{{formName.passwordError}}</p>
+        <el-form-item prop="password" label="密码">
+          <el-input type="password" v-model="form.password"></el-input>
         </el-form-item>
-        <el-button type="primary" @click="submitForm('formName')">提交</el-button>
+        <el-button type="primary" @click="submitForm('form')">提交</el-button>
         <el-button @click="resetForm">重置</el-button>
       </el-form>
     </div>
@@ -31,53 +29,47 @@ export default {
   },
   data () {
     return {
-      formName: {
-        user: '',
-        userError: '',
-        password: '',
-        passwordError: ''
+      form: {
+        name: '',
+        password: ''
+      },
+      rules: {
+        name: [
+          { required: true, message: '请输入用户名', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' }
+        ]
       }
     }
   },
   methods: {
     resetForm: function () {
-      this.formName.user = ''
-      this.formName.userError = ''
-      this.formName.password = ''
-      this.formName.passwordError = ''
+      this.$refs['form'].resetFields()
     },
-    submitForm: function (formName) {
-      var user = this.formName.user
-      var password = this.formName.password
-      var that = this
-      Axios.get(
-        '/api/users/login?name=' + user + '&password=' + password
-      ).then(function (res) {
-        if (res.data.code === 0) {
-          setCookie('user', JSON.stringify(res.data.data), 7 * 24 * 60 * 60)
-          that.$router.go('/')
-          that.$message.success('登录成功')
+    submitForm: function (form) {
+      this.$refs['form'].validate((valid) => {
+        if (valid) {
+          var user = this.form.name
+          var password = this.form.password
+          var that = this
+          Axios.get(
+            '/api/users/login?name=' + user + '&password=' + password
+          ).then(function (res) {
+            if (res.data.code === 0) {
+              setCookie('user', JSON.stringify(res.data.data), 7 * 24 * 60 * 60)
+              that.$router.go('/')
+              that.$message.success('登录成功')
+            } else {
+              that.$message.error('登录失败，用户名或密码不正确')
+            }
+          }).catch(function () {
+            that.$message.error('登录失败，用户名或密码不正确')
+          })
         } else {
-          that.$message.error('登录失败，用户名或密码不正确')
+          return false
         }
-      }).catch(function () {
-        that.$message.error('登录失败，用户名或密码不正确')
       })
-    },
-    inputBlur: function (errorItem, inputContent) {
-      if (errorItem === 'user') {
-        if (inputContent === '') {
-          this.formName.userError = '用户名不能为空'
-        } else {
-          this.formName.userError = ''
-        }
-      } else if (errorItem === 'password') {
-        if (inputContent === '') {
-          this.formName.passwordError = '密码不能为空'
-        } else {
-          this.formName.passwordError = ''
-        }
-      }
     }
   }
 }

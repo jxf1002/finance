@@ -47,11 +47,16 @@ export default {
   name: 'App',
   data () {
     return {
-      loginUser: ''
+      loginUser: null
     }
   },
   mounted () {
-    this.loginUser = JSON.parse(getCookie('user'))
+    var user = getCookie('user')
+    if (user) {
+      this.loginUser = JSON.parse(user)
+    } else {
+      this.loginUser = null
+    }
   },
   methods: {
     handleCommand (command) {
